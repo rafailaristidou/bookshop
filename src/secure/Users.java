@@ -255,12 +255,13 @@ public class Users extends javax.swing.JFrame {
         if (selectedOption == JOptionPane.YES_OPTION) {
             int rowsel=jTable1.getSelectedRow();
             String user=String.valueOf(jTable1.getValueAt(rowsel,0).toString());
-            String delete = ("Delete  From Login Where Username ='"+user+"'");
+            String delete = ("Delete  From Login Where Username = ?");
             conn=MySqlconnect.dbConnection();
 
-            try{st=conn.createStatement();
-
-                st.executeUpdate(delete);
+            try{
+                prs=conn.prepareStatement(delete);
+                prs.setString(1,user);
+                prs.executeUpdate();
 
             } catch (Exception ex){
                 JOptionPane.showMessageDialog(null,"That User Dose Not Exist");
@@ -310,10 +311,12 @@ public class Users extends javax.swing.JFrame {
         modelcl.setColumnCount(0);
         String user=String.valueOf(txtuser.getText());
         try{
-            st = conn.createStatement();
+            
 
-            String sql=("SELECT * FROM login where username='"+user+"'");
-            rs=st.executeQuery(sql);
+            String sql=("SELECT * FROM login where username = ?");
+            prs=conn.prepareStatement(sql);
+            prs.setString(1,user);
+            ResultSet rs = prs.executeQuery();
             ResultSetMetaData metadata= rs.getMetaData();
 
             int col = metadata.getColumnCount();

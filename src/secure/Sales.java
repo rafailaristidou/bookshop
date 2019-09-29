@@ -372,10 +372,14 @@ DefaultTableModel modelcl = (DefaultTableModel) jTable1.getModel();
         modelcl.setColumnCount(0);
         int rid=Integer.valueOf(txtrid.getText());
         try{
-            st = conn.createStatement();
+           
 
-            String sql=("SELECT * FROM sales where receiptid='"+rid+"'");
-            rs=st.executeQuery(sql);
+            String sql=("SELECT * FROM sales where receiptid = ?");
+            prs=conn.prepareStatement(sql);
+            prs.setInt(1, rid);
+            ResultSet rs = prs.executeQuery();
+           
+           
             ResultSetMetaData metadata= rs.getMetaData();
 
             int col = metadata.getColumnCount();
@@ -396,10 +400,10 @@ DefaultTableModel modelcl = (DefaultTableModel) jTable1.getModel();
                 model.addRow(rows);
             }
             jTable1.setModel(model);
-        }
-        catch (Exception ex){
-            System.out.println("exception 2 ");
-        }
+         } catch (Exception ex){
+            System.out.println("exception 0 ");
+            }
+            
 
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -455,7 +459,7 @@ DefaultTableModel modelcl = (DefaultTableModel) jTable1.getModel();
             int rid=Integer.valueOf(jTable1.getValueAt(rowsel,0).toString());
             int bid=Integer.valueOf(jTable1.getValueAt(rowsel,1).toString());
             int returnqty=Integer.valueOf(jTable1.getValueAt(rowsel,2).toString());
-            String delete = ("Delete  From Sales Where Receiptid ='"+rid+"' And Bookid='"+bid+"'");
+            String delete = ("Delete  From Sales Where Receiptid = ? And Bookid = ?");
             int selectedOptionqty = JOptionPane.showConfirmDialog(null,
             "Do You Wanna Return Quanity Back ?",
             "Choose",
@@ -465,9 +469,11 @@ DefaultTableModel modelcl = (DefaultTableModel) jTable1.getModel();
             }
             conn=MySqlconnect.dbConnection();
 
-            try{st=conn.createStatement();
-
-                st.executeUpdate(delete);
+            try{ 
+                prs=conn.prepareStatement(delete);
+                prs.setInt(1, rid);
+                prs.setInt(2, bid);
+                prs.executeUpdate();
 
             } catch (Exception ex){
                 JOptionPane.showMessageDialog(null,"That Sale Dose Not Exist");

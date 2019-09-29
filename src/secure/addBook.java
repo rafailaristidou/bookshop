@@ -390,9 +390,13 @@ pubid.addItem(combo[a]);}
         Connection conn = MySqlconnect.dbConnection() ;
         
         try{
-        st = conn.createStatement();
-        rs=st.executeQuery("select BOOKID from BOOKS where BOOKID = "+n+"");//vriski ton titlo tou vivliou
-        
+       
+            
+        String sql1=("select BOOKID from BOOKS where BOOKID = ?");//vriski ton titlo tou vivliou
+         prs=conn.prepareStatement(sql1);
+         prs.setString(1,n);
+            
+        ResultSet rs = prs.executeQuery();
         int p=0;
         while(rs.next()){
             p++;

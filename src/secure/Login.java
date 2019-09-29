@@ -152,9 +152,19 @@ PreparedStatement prs=null;
         st = conn.createStatement();
         String usn = txtusername.getText();
         String passwd = txtpassword.getText();
-        String sql1 = "Select USERNAME,PASSWORD from LOGIN where USERNAME='"+usn+"'and PASSWORD='"+passwd+"'";
+        
+        String sql1 = ("Select USERNAME,PASSWORD from LOGIN where USERNAME = ? and PASSWORD = ?");
         String sql2=("Update Login Set last_login = ? Where Username = ?");
-        rs=st.executeQuery(sql1);
+        try{        
+            prs=conn.prepareStatement(sql1);
+            prs.setString(1,usn);
+            prs.setString(2,passwd);
+            ResultSet rs = prs.executeQuery();
+                    
+            }catch (Exception ex){
+            System.out.println("exception 2 ");
+            }
+        
         int count = 0;
         while(rs.next()){
             count = count+1;

@@ -305,7 +305,7 @@ Statement st=null;
         
         try{
         st = conn.createStatement();
-        rs=st.executeQuery("Select Username from login where Username = '"+n+"'");//vriski ton titlo tou vivliou
+        rs=st.executeQuery("Select Username from login where Username = '"+n+"'");
         
         int p=0;
         while(rs.next()){
